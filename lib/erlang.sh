@@ -23,6 +23,7 @@ use_erlang() {
         tput setaf 1
         echo "kerl not available; using default Erlang"
         echo "See http://blog.differentpla.net/blog/2019/01/30/installing-kerl/"
+        echo $(pwd)
         tput sgr0
     fi
 }

@@ -25,6 +25,7 @@ eval "$(direnv hook bash)
 ```bash
 mkdir -p $HOME/.config/direnv
 ln -s $(pwd)/lib $HOME/.config/direnv
+mkdir -p $HOME/.config/direnv/bin
 ```
 
 ## What's missing?
