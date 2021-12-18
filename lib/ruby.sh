@@ -19,11 +19,15 @@ use_ruby() {
     # gem install bundler && bundle install
 }
 
-bundle_check() {
-    # This has to come after 'layout ruby'
-    if [ -f Gemfile ]; then
-        gem list -i '^bundler$' >/dev/null || \
-            gem install --no-ri --no-rdoc bundler && \
-            bundle check
+# This has to come after 'layout ruby'
+use_bundler() {
+    if [ -f Gemfile.lock ]; then
+        bundler_version="$(grep -A1 '^BUNDLED WITH' Gemfile.lock | tail -n 1 | xargs echo)"
+        echo "Using bundler $bundler_version"
+        gem list -i '^bundler$' -v "$bundler_version" > /dev/null || \
+            gem install --no-document bundler -v "$bundler_version"
     fi
+   if [ -f Gemfile ]; then
+       bundle check
+   fi
 }
