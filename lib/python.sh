@@ -1,7 +1,7 @@
 use_python() {
     PYTHON_VERSION="$1"
 
-    PYTHONS_DIR="$HOME/.pyenv/pythons"
+    PYTHONS_DIR="$HOME/.pyenv/versions"
     PYTHON_PREFIX="$PYTHONS_DIR/$PYTHON_VERSION"
     if [ -s "$PYTHON_PREFIX" ]; then
         load_prefix "$PYTHON_PREFIX"
