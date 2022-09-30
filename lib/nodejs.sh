@@ -7,8 +7,13 @@ use_nodejs() {
     else
         export NVM_DIR=$HOME/.nvm
 
-        type nvm >/dev/null 2>&1 || . ~/.nvm/nvm.sh
-        nvm use "$NODE_VERSION"
+        if type nvm >/dev/null 2>&1 || . ~/.nvm/nvm.sh; then
+            nvm use "$NODE_VERSION"
+	else
+	    tput setaf 1
+	    echo "'nvm' not installed; see https://github.com/nvm-sh/nvm"
+	    tput sgr0
+	fi
     fi
 }
 
