@@ -29,6 +29,9 @@ use_erlang() {
 
             export OTP_ROOT="$OTP_INSTALLATION"
             export OTP_VERSION
+
+	    export REBAR_CACHE_DIR=$(pwd)/.direnv/rebar3
+	    mkdir -p "$REBAR_CACHE_DIR"
         elif has erl; then
             echo "${yellow}Erlang/OTP ${yellow_bold}$OTP_VERSION${yellow} not available via kerl; using default ${yellow_bold}$(erlang_version)${normal}"
             echo "${yellow}See http://blog.differentpla.net/blog/2019/01/30/installing-erlang-with-kerl/${normal}"
