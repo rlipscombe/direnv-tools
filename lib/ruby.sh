@@ -22,14 +22,16 @@ use_ruby() {
 # This has to come after 'layout ruby'
 use_bundler() {
     if [ -f Gemfile.lock ]; then
-        watch_file Gemfile.lock
         bundler_version="$(grep -A1 '^BUNDLED WITH' Gemfile.lock | tail -n 1 | xargs echo)"
+        tput setaf 2
         echo "Using bundler $bundler_version"
+        tput sgr0
         gem list -i '^bundler$' -v "$bundler_version" > /dev/null || \
             gem install --no-document bundler -v "$bundler_version"
     fi
     if [ -f Gemfile ]; then
-        watch_file Gemfile
         bundle check
     fi
+    watch_file Gemfile
+    watch_file Gemfile.lock
 }
