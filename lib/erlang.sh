@@ -1,3 +1,5 @@
+# shellcheck shell=sh
+
 erlang_version() {
     erl -noshell -eval '
         VersionFile = filename:join([
@@ -25,13 +27,11 @@ use_erlang() {
         OTP_INSTALLATION=$(kerl list installations | grep "^$OTP_VERSION " | cut -d' ' -f2)
         if [ -s "$OTP_INSTALLATION/activate" ] ; then
             echo "${green}Using Erlang/OTP ${green_bold}$OTP_VERSION${green} (in $OTP_INSTALLATION) via kerl${normal}"
+            # shellcheck source=/dev/null
             . "$OTP_INSTALLATION/activate"
 
             export OTP_ROOT="$OTP_INSTALLATION"
             export OTP_VERSION
-
-	    export REBAR_CACHE_DIR=$(pwd)/.direnv/rebar3
-	    mkdir -p "$REBAR_CACHE_DIR"
         elif has erl; then
             echo "${yellow}Erlang/OTP ${yellow_bold}$OTP_VERSION${yellow} not available via kerl; using default ${yellow_bold}$(erlang_version)${normal}"
             echo "${yellow}See http://blog.differentpla.net/blog/2019/01/30/installing-erlang-with-kerl/${normal}"
@@ -48,6 +48,32 @@ use_erlang() {
     else
         echo "${red}No default Erlang/OTP available${normal}"
     fi
+}
+
+use_rebar3() {
+    # Rather than download rebar3 every time, we'll check that there's a copy in $XDG_CACHE_HOME:
+    XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
+    REBAR_SOURCE_URL=https://s3.amazonaws.com/rebar3/rebar3
+    REBAR_BOOTSTRAP=$XDG_CACHE_HOME/rebar3/tmp/rebar3
+
+    if ! has "$REBAR_BOOTSTRAP"; then
+        mkdir -p "$XDG_CACHE_HOME/rebar3/tmp"
+        wget -O "$REBAR_BOOTSTRAP" $REBAR_SOURCE_URL
+        chmod +x "$REBAR_BOOTSTRAP"
+    fi
+
+    # Then we'll use that bootstrap copy to do a per-repo local install, in the same place as we want it to install
+    # plugins:
+    REBAR_CACHE_DIR=$(pwd)/.direnv/rebar3
+    export REBAR_CACHE_DIR
+    mkdir -p "$REBAR_CACHE_DIR"
+
+    if ! has "$REBAR_CACHE_DIR/bin/rebar3"; then
+        mkdir -p "$REBAR_CACHE_DIR/bin"
+        "$REBAR_BOOTSTRAP" local install
+    fi
+
+    PATH_add "$REBAR_CACHE_DIR/bin"
 }
 
 # vim:sw=4:sts=4:ts=8:et
