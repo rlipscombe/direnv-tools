@@ -70,7 +70,7 @@ use_rebar3() {
 
     if ! has "$REBAR_CACHE_DIR/bin/rebar3"; then
         mkdir -p "$REBAR_CACHE_DIR/bin"
-        "$REBAR_BOOTSTRAP" local install
+        REBAR_CONFIG=/dev/null "$REBAR_BOOTSTRAP" local install
     fi
 
     PATH_add "$REBAR_CACHE_DIR/bin"
