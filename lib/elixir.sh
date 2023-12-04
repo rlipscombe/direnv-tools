@@ -21,3 +21,12 @@ use_elixir() {
         tput sgr0
     fi
 }
+
+use_mix() {
+    if has mix; then
+        mix local.hex --if-missing --force
+        mix local.rebar --if-missing --force
+    fi
+
+    PATH_add "$HOME/.mix/escripts"
+}
