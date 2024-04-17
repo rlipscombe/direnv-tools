@@ -64,7 +64,8 @@ use_rebar3() {
 
     # Then we'll use that bootstrap copy to do a per-repo local install, in the same place as we want it to install
     # plugins:
-    REBAR_CACHE_DIR=$(pwd)/.direnv/rebar3
+    # We vary the path by OTP version, to ensure that rebar and plugins are compiled against the correct version.
+    REBAR_CACHE_DIR=$(pwd)/.direnv/${OTP_VERSION}/rebar3
     export REBAR_CACHE_DIR
     mkdir -p "$REBAR_CACHE_DIR"
 
