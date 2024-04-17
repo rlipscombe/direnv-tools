@@ -12,3 +12,7 @@ use_python() {
         tput sgr0
     fi
 }
+
+use_pyenv() {
+    PATH_add $HOME/.direnv/pyenv/bin
+}
