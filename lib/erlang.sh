@@ -69,6 +69,8 @@ use_rebar3() {
     export REBAR_CACHE_DIR
     mkdir -p "$REBAR_CACHE_DIR"
 
+    echo 'rebar3' > "$(pwd)/.direnv/$(erlang_version)/.gitignore"
+
     if ! has "$REBAR_CACHE_DIR/bin/rebar3"; then
         mkdir -p "$REBAR_CACHE_DIR/bin"
         REBAR_CONFIG=/dev/null "$REBAR_BOOTSTRAP" local install
