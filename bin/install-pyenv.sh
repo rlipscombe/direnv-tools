@@ -1,6 +1,6 @@
 #!/bin/sh
 
-PYENV_VERSION=2.3.11
+PYENV_VERSION=2.5.5
 
 mkdir -p "$HOME/.direnv/"
 cd "$HOME/.direnv/" || exit
