@@ -53,11 +53,13 @@ use_erlang() {
 use_rebar3() {
     # Rather than download rebar3 every time, we'll check that there's a copy in $XDG_CACHE_HOME:
     XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
-    REBAR_SOURCE_URL=https://s3.amazonaws.com/rebar3/rebar3
+    REBAR_VERSION=3.25.1
+    REBAR_SOURCE_URL=https://github.com/erlang/rebar3/releases/download/$REBAR_VERSION/rebar3
     REBAR_BOOTSTRAP=$XDG_CACHE_HOME/rebar3/tmp/rebar3
 
     if ! has "$REBAR_BOOTSTRAP"; then
         mkdir -p "$XDG_CACHE_HOME/rebar3/tmp"
+        echo "Fetching $REBAR_SOURCE_URL..."
         wget -O "$REBAR_BOOTSTRAP" $REBAR_SOURCE_URL
         chmod +x "$REBAR_BOOTSTRAP"
     fi
@@ -73,7 +75,9 @@ use_rebar3() {
 
     if ! has "$REBAR_CACHE_DIR/bin/rebar3"; then
         mkdir -p "$REBAR_CACHE_DIR/bin"
+        echo "Bootstrapping rebar3 from $REBAR_BOOTSTRAP to $REBAR_CACHE_DIR/bin/rebar3..."
         REBAR_CONFIG=/dev/null "$REBAR_BOOTSTRAP" local install
+        REBAR_CONFIG=/dev/null "$REBAR_CACHE_DIR/bin/rebar3" version
     fi
 
     PATH_add "$REBAR_CACHE_DIR/bin"
