@@ -1,11 +1,12 @@
 use_elixir() {
     ELIXIR_VERSION="$1"
+    OTP_MAJOR_VERSION=$(erl -noshell -eval 'io:format("~s~n", [erlang:system_info(otp_release)]), halt().')
     if has kiex; then
-        if [ -s "$HOME/.kiex/elixirs/elixir-$ELIXIR_VERSION.env" ]; then
+        if [ -s "$HOME/.kiex/elixirs/elixir-$ELIXIR_VERSION-$OTP_MAJOR_VERSION.env" ]; then
             tput setaf 2
             echo "Using Elixir $ELIXIR_VERSION via kiex"
             tput sgr0
-            . "$HOME/.kiex/elixirs/elixir-$ELIXIR_VERSION.env"
+            . "$HOME/.kiex/elixirs/elixir-$ELIXIR_VERSION-$OTP_MAJOR_VERSION.env"
         else
             tput setaf 1
             echo "Elixir $ELIXIR_VERSION not available via kiex; using default"
